@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gaming Prediction</title>
+  <style>
+    /* Basic Styling */
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #000;
+      color: #0f0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      overflow: hidden;
+      position: relative;
+    }
+
+    /* Spider Web Background */
+    body::before {
+      content: "";
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      background: url('spider-web.png') repeat;
+      background-size: 180px 180px;
+      opacity: 0.2;
+      animation: moveWeb 6s infinite linear alternate;
+    }
+
+    @keyframes moveWeb {
+      0% { background-position: 0 0; }
+      100% { background-position: 100px 100px; }
+    }
+
+    /* Container */
+    .container {
+      width: 90%;
+      max-width: 450px;
+      padding: 25px;
+      text-align: center;
+      background: rgba(0, 0, 0, 0.85);
+      border-radius: 12px;
+      border: 2px solid #00ff00;
+      box-shadow: 0 0 25px #00ff00;
+      z-index: 2;
+      position: relative;
+    }
+
+    /* Profile Image */
+    .profile-img {
+      width: 100px;
+      height: 100px;
+      border-radius: 50%;
+      border: 2px solid #00ff00;
+      margin-bottom: 15px;
+    }
+
+    /* Input Fields */
+    .input-field {
+      width: 100%;
+      padding: 10px;
+      margin: 10px 0;
+      border-radius: 5px;
+      border: 2px solid #00ff00;
+      background: #000;
+      color: #0f0;
+      font-size: 16px;
+      text-align: center;
+    }
+
+    /* Buttons */
+    .button {
+      background: #00ff00;
+      border: none;
+      color: #000;
+      padding: 14px 18px;
+      border-radius: 5px;
+      cursor: pointer;
+      font-weight: bold;
+      font-size: 18px;
+      margin-top: 10px;
+      transition: 0.3s;
+      display: block;
+      width: 100%;
+      text-align: center;
+      text-decoration: none;
+    }
+
+    .button:hover {
+      background: #0f0;
+      transform: scale(1.05);
+    }
+
+    /* Bigger Team Name */
+    h3 {
+      font-size: 28px; 
+      font-weight: bold;
+      text-transform: uppercase;
+      color: #0f0;
+      text-shadow: 0 0 12px #0f0;
+    }
+
+    /* Flashing Name */
+    .flashing-name {
+      font-size: 20px; 
+      font-weight: bold;
+      text-transform: uppercase;
+      margin-bottom: 15px;
+      color: #ff0;
+      text-shadow: 0 0 10px #ff0;
+      opacity: 0;
+      animation: flashName 3s infinite;
+    }
+
+    @keyframes flashName {
+      0% { opacity: 0; transform: scale(0.8); }
+      50% { opacity: 1; transform: scale(1); }
+      100% { opacity: 0; transform: scale(1.2); }
+    }
+
+    /* Result Box */
+    .box {
+      background: rgba(0, 255, 0, 0.2);
+      padding: 15px;
+      margin: 20px 0;
+      border-radius: 10px;
+      font-size: 22px;
+      font-weight: bold;
+      text-transform: uppercase;
+      border: 2px solid #00ff00;
+      box-shadow: 0 0 15px #00ff00;
+    }
+
+    /* Telegram Button */
+    .telegram-button {
+      background: #0088cc;
+      color: #fff;
+      font-size: 16px;
+      padding: 8px 15px;
+      border-radius: 5px;
+      text-decoration: none;
+      font-weight: bold;
+      margin-top: 15px;
+      display: inline-block;
+      transition: 0.3s;
+    }
+
+    .telegram-button:hover {
+      background: #00aaff;
+      transform: scale(1.1);
+    }
+
+    /* Custom Android-Style Alert */
+    .custom-alert {
+      position: fixed;
+      bottom: -100px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: #222;
+      color: #fff;
+      padding: 15px 20px;
+      border-radius: 8px;
+      box-shadow: 0 0 15px rgba(0, 255, 0, 0.8);
+      font-size: 16px;
+      font-weight: bold;
+      text-align: center;
+      min-width: 250px;
+      transition: bottom 0.5s ease-in-out;
+      z-index: 1000;
+    }
+
+    /* Show Alert */
+    .custom-alert.show {
+      bottom: 20px;
+    }
+
+  </style>
+</head>
+<body>
+
+  <!-- Custom Alert -->
+  <div id="customAlert" class="custom-alert"></div>
+
+  <!-- Login Section -->
+  <div class="container" id="loginPage">
+    <img src="https://i.ibb.co.com/dJpHpDh2/image.jpg" alt=" border="0"></a>
+    <h3>Login</h3>
+    <input type="text" class="input-field" id="username" placeholder="Username">
+    <input type="password" class="input-field" id="password" placeholder="Password">
+    <button class="button" onclick="login()">Login</button>
+  </div>
+
+  <!-- Prediction Section -->
+  <div class="container" id="predictionPage" style="display: none;">
+    <h3>HR ZONE TEAM</h3>
+    <div class="flashing-name" id="flashingName">Loading...</div>
+    <div class="box">Result: <span id="currentResult">Click to Show</span></div>
+    <button class="button" onclick="showResult()">Show Result</button>
+
+    <!-- Telegram Button -->
+    <a href="https://t.me/+ZUUzdVW0JYU1YmZl" class="telegram-button" target="_blank">Join Telegram</a>
+  </div>
+
+  <script>
+    function showCustomAlert(message) {
+      const alertBox = document.getElementById("customAlert");
+      alertBox.textContent = message;
+      alertBox.classList.add("show");
+
+      setTimeout(() => {
+        alertBox.classList.remove("show");
+      }, 3000);
+    }
+
+    function login() {
+      const username = document.getElementById("username").value;
+      const password = document.getElementById("password").value;
+
+      if (username === "GIFT" && password === "Free Hack") {
+        document.getElementById("loginPage").style.display = "none";
+        document.getElementById("predictionPage").style.display = "block";
+      } else {
+        showCustomAlert("❌ Invalid Username or Password!");
+      }
+    }
+
+    let lastUpdated = 0;
+    function showResult() {
+      const now = Date.now();
+      if (now - lastUpdated >= 30000) {
+        const resultEl = document.getElementById("currentResult");
+        const result = Math.random() < 0.5 ? "SMALL" : "BIG";
+        resultEl.textContent = result.toUpperCase();
+        resultEl.style.color = result === "SMALL" ? "#ff0" : "#f00";
+        lastUpdated = now;
+      } else {
+        showCustomAlert("⏳ Wait 30 seconds before changing the result again!");
+      }
+    }
+
+    const names = ["HASIB ONE FIRE", "MIRAJ TLB OWNER", "JOY SUB OWNER"];
+    let nameIndex = 0;
+    setInterval(() => { 
+      document.getElementById("flashingName").textContent = names[nameIndex++ % names.length]; 
+    }, 3000);
+  </script>
+
+</body>
+</html>
